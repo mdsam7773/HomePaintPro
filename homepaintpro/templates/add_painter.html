@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Add New Painter</h3>
+
+<form method="POST">
+  <div class="mb-3">
+    <label>Name</label>
+    <input name="name" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Phone</label>
+    <input name="phone" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+  <label>Password</label>
+  <input type="password" name="password" class="form-control" required>
+</div>
+
+
+  <div class="mb-3">
+    <label>Experience (e.g. 5 years)</label>
+    <input name="experience" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label>Speciality</label>
+    <input name="speciality" class="form-control" placeholder="Putty, Texture, Interior">
+  </div>
+
+  <div class="mb-3">
+    <label>City</label>
+    <input name="city" class="form-control">
+  </div>
+
+  <button class="btn btn-success w-100">Save Painter</button>
+</form>
+
+{% endblock %}

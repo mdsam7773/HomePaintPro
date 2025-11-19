@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <h3>Painters List</h3>
+  <a href="{{ url_for('add_painter') }}" class="btn btn-success">+ Register Painter</a>
+</div>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-primary">
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>password</th>
+      <th>Experience</th>
+      <th>Speciality</th>
+      <th>City</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for p in painters %}
+    <tr>
+      <td>{{ p.name }}</td>
+      <td>{{ p.phone }}</td>
+      <td>{{ p.password }}</td>
+      <td>{{ p.experience }}</td>
+      <td>{{ p.speciality }}</td>
+      <td>{{ p.city }}</td>
+      <td>{{ 'Active' if p.is_active else 'Inactive' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Your Assigned Jobs</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in bookings %}
+        <tr>
+            <td>{{ b.name }}</td>
+            <td>{{ b.phone }}</td>
+            <td>{{ b.address }}</td>
+
+            <td>
+                <span class="badge bg-info">{{ b.status }}</span>
+            </td>
+
+            <td>
+                <form method="POST" action="/painter/update/{{ b.id }}">
+                    <select name="status" class="form-select form-select-sm">
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                    </select>
+                    <button class="btn btn-success btn-sm mt-1">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

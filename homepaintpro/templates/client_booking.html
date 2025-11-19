@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3 class="mb-4">Book a Painting Service 🎨</h3>
+
+<form method="POST" action="/book">
+
+  <!-- BASIC DETAILS -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Name</label>
+      <input name="name" class="form-control" required>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Phone</label>
+      <input name="phone" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label>Address</label>
+    <textarea name="address" class="form-control" rows="2" required></textarea>
+  </div>
+
+
+  <!-- AREA DETAILS -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Area Type</label>
+      <select name="area_type" class="form-select">
+        <option>Home</option>
+        <option>Office</option>
+        <option>Shop</option>
+        <option>Factory</option>
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Preferred Work Date</label>
+      <input type="date" name="work_date" class="form-control">
+    </div>
+  </div>
+
+
+  <!-- SIZE & ROOMS -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Total Area Size (sq.ft)</label>
+      <input type="number" name="room_size" class="form-control" placeholder="e.g. 500">
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Number of Rooms</label>
+      <input type="number" name="number_of_rooms" class="form-control">
+    </div>
+  </div>
+
+
+  <!-- SERVICE & SURFACE -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Service Type</label>
+      <select name="service_type" class="form-select">
+        <option value="painting">Wall Painting</option>
+        <option value="putty">Putty Work</option>
+        <option value="both">Painting + Putty</option>
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Surface Type</label>
+      <select name="surface_type" class="form-select">
+        <option>Interior</option>
+        <option>Exterior</option>
+        <option>Both</option>
+      </select>
+    </div>
+  </div>
+
+
+  <!-- MATERIAL DETAILS -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Paint Type</label>
+      <select name="paint_type" class="form-select">
+        <option value="emulsion">Emulsion</option>
+        <option value="distemper">Distemper</option>
+        <option value="luxury">Luxury Paint</option>
+        <option value="texture">Texture Finish</option>
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Paint Brand</label>
+      <select name="paint_brand" class="form-select">
+        <option>Asian Paints</option>
+        <option>Nerolac</option>
+        <option>Indigo</option>
+        <option>JSW Paints</option>
+        <option>Not Sure</option>
+      </select>
+    </div>
+  </div>
+
+
+  <!-- CONDITION -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Wall Condition</label>
+      <select name="wall_condition" class="form-select">
+        <option>Smooth</option>
+        <option>Cracks present</option>
+        <option>Damp patches</option>
+        <option>Uneven / Needs Putty</option>
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Paint Coats</label>
+      <select name="paint_coats" class="form-select">
+        <option>1 Coat</option>
+        <option>2 Coats</option>
+        <option>3 Coats</option>
+      </select>
+    </div>
+  </div>
+
+
+  <!-- EXTRA SERVICES -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label>Ceiling Painting Required?</label>
+      <select name="ceiling_paint" class="form-select">
+        <option>No</option>
+        <option>Yes</option>
+      </select>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label>Furniture Shifting Required?</label>
+      <select name="furniture_shift" class="form-select">
+        <option>No</option>
+        <option>Yes – Heavy Furniture</option>
+        <option>Yes – Light Furniture</option>
+      </select>
+    </div>
+  </div>
+
+
+  <!-- EXTRA REQUIREMENTS -->
+  <div class="mb-3">
+    <label>Existing Paint Removal?</label>
+    <select name="paint_removal" class="form-select">
+      <option>No</option>
+      <option>Yes - Full Removal</option>
+      <option>Yes - Partial Removal</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label>Estimated Budget (₹)</label>
+    <input type="text" name="budget" class="form-control" placeholder="Example: 10000 - 20000">
+  </div>
+
+  <div class="mb-3">
+    <label>Additional Notes</label>
+    <textarea name="notes" class="form-control" rows="3"></textarea>
+  </div>
+
+  <button type="button" class="btn btn-outline-primary w-100 mb-3" onclick="estimatePrice()">
+  Estimate Price
+</button>
+
+<div id="estimate-box" class="alert alert-info mt-3" style="display:none"></div>
+
+
+
+  <!-- SUBMIT -->
+  <button class="btn btn-success w-100">Submit Booking</button>
+</form>
+
+<script>
+function estimatePrice() {
+    let size = parseFloat(document.getElementsByName("room_size")[0].value) || 0;
+    let coats = document.getElementsByName("paint_coats")[0].value;
+    let paintType = document.getElementsByName("paint_type")[0].value;
+    let ceiling = document.getElementsByName("ceiling_paint")[0].value;
+    let putty = document.getElementsByName("service_type")[0].value;
+
+    let baseRate = 12; // price per sq.ft
+    let total = size * baseRate;
+
+    // Paint type multiplier
+    if (paintType === "luxury") total *= 1.4;
+    else if (paintType === "texture") total *= 1.8;
+    else if (paintType === "distemper") total *= 0.9;
+
+    // Coats multiplier
+    if (coats === "2 Coats") total *= 1.6;
+    if (coats === "3 Coats") total *= 2.0;
+
+    // Putty add-on
+    if (putty === "putty" || putty === "both") total += size * 5;
+
+    // Ceiling painting add-on
+    if (ceiling === "Yes") total += size * 10;
+
+    let box = document.getElementById("estimate-box");
+    box.style.display = "block";
+    box.innerHTML = "<strong>Estimated Cost:</strong> ₹" + Math.round(total);
+}
+</script>
+
+
+{% endblock %}

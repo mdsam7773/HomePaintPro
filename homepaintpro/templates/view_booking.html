@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3 class="mb-4">Booking Details</h3>
+
+<div class="card shadow p-4">
+
+    <h5>Client Information</h5>
+    <hr>
+    <p><strong>Name:</strong> {{ booking.name }}</p>
+    <p><strong>Phone:</strong> {{ booking.phone }}</p>
+    <p><strong>Address:</strong> {{ booking.address }}</p>
+    <p><strong>Requested Date:</strong> {{ booking.work_date }}</p>
+
+    <br>
+
+    <h5>Assigned Painter</h5>
+    <hr>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label>Assign Painter</label>
+            <select name="painter_id" class="form-select">
+                <option value="">Not Assigned</option>
+                {% for p in painters %}
+                <option value="{{ p.id }}" {% if booking.painter_id == p.id %}selected{% endif %}>
+                    {{ p.name }} ({{ p.speciality }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Rate (₹)</label>
+            <input name="rate" class="form-control" value="{{ booking.rate }}">
+        </div>
+
+        <div class="mb-3">
+            <label>Status</label>
+            <select name="status" class="form-select">
+                <option {% if booking.status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option {% if booking.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option {% if booking.status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option {% if booking.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary w-100">Save Updates</button>
+    </form>
+
+    <hr>
+
+    <div class="text-center mt-3">
+        <a href="https://wa.me/91{{ booking.phone }}" class="btn btn-success">WhatsApp Client</a>
+        <a href="tel:+91{{ booking.phone }}" class="btn btn-dark">Call Client</a>
+    </div>
+
+</div>
+
+{% endblock %}
